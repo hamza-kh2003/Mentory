@@ -32,6 +32,12 @@
                     >
                       <i class="bi bi-chat-square-text me-2"></i> Reviews
                     </a>
+                    <a
+                  href="{{route('admin.subjects-branches')}}"
+                  class="list-group-item list-group-item-action"
+                >
+                  <i class="bi bi-book me-2"></i> Subjects & Branches
+                </a>
                   </div>
                 </div>
               </div>

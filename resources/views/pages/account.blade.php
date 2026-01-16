@@ -3,7 +3,8 @@
 @section('title','Account Setting')
 
 @section('content')
-       <div class="container" data-aos="fade-up">
+      <section class="py-5">
+        <div class="container" data-aos="fade-up">
           <!-- Page Title -->
           <div class="text-center mb-4">
             <h3 class="mb-1">My Account</h3>

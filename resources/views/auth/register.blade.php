@@ -15,6 +15,34 @@
             <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
+<!--Phone-->
+        <div class="mt-4">
+  <x-input-label for="phone" value="Phone Number" />
+  <x-text-input id="phone" class="block mt-1 w-full"
+    type="text" name="phone" :value="old('phone')" required autofocus
+    placeholder="07XXXXXXXX" />
+  <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+</div>
+
+<!-- Role -->
+<div class="mt-4">
+    <x-input-label for="role" :value="__('Role')" />
+
+    <select
+        id="role"
+        name="role"
+        required
+        class="block mt-1 w-full rounded-md border-gray-300 shadow-sm
+               focus:border-indigo-500 focus:ring-indigo-500"
+    >
+        <option value="" disabled selected>Select role</option>
+        <option value="student">Student</option>
+        <option value="teacher">Teacher</option>
+    </select>
+
+    <x-input-error :messages="$errors->get('role')" class="mt-2" />
+</div>
+
 
         <!-- Password -->
         <div class="mt-4">

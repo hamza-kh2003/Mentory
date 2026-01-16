@@ -1,4 +1,4 @@
-   <footer id="footer" class="footer light-background border-top py-4 mt-auto">
+   <footer id="footer" class="footer bg-body-secondary border-top py-4 mt-auto">
       <div class="container">
         <div class="row align-items-center gy-3">
           <!-- Copyright Left -->
