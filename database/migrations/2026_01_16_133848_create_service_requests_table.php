@@ -23,7 +23,7 @@ return new class extends Migration
         ->constrained('teacher_profiles')
         ->cascadeOnDelete();
 
-    $table->enum('status', ['pending', 'accepted', 'completed', 'cancelled'])
+    $table->enum('status', ['pending', 'accepted', 'completed', 'rejected'])
           ->default('pending');
 
     $table->timestamps();

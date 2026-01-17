@@ -7,4 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Review extends Model
 {
     //
+    protected $fillable = [
+        'service_request_id',
+        'rating',
+        'comment',
+    ];
+
+    public function serviceRequest()
+    {
+        return $this->belongsTo(ServiceRequest::class);
+    }
 }

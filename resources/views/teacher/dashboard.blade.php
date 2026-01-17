@@ -35,86 +35,87 @@
                 <div class="card-body">
                   <h5 class="mb-3">Teacher Profile</h5>
 
-                  <form>
-                    <!-- ✅ Teacher Image (ONLY ADDITION) -->
-                    <div class="mb-3 text-center">
-                      <img
-                        src="assets/img/teacher-placeholder.jpg"
-                        alt="Teacher Image"
-                        class="rounded-circle mb-2"
-                        style="width: 120px; height: 120px; object-fit: cover"
-                      />
-                      <label class="form-label d-block">Profile Image</label>
-                      <input type="file" class="form-control" />
-                    </div>
+                    <form method="POST" action="{{ route('teacher.profile.save') }}" enctype="multipart/form-data">
+  @csrf
 
-                    <div class="mb-3">
-                      <label class="form-label">Display Name</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Mr. Ahmad Saleh"
-                      />
-                    </div>
+  <div class="mb-3 text-center">
+    <img
+      src="{{ $profile && $profile->image_path ? asset('storage/'.$profile->image_path) : asset('assets/img/teacher-placeholder.jpg') }}"
+      alt="Teacher Image"
+      class="rounded-circle mb-2"
+      style="width: 120px; height: 120px; object-fit: cover"
+    />
+    <label class="form-label d-block">Profile Image</label>
+    <input type="file" name="image" class="form-control" />
+  </div>
 
-                    <div class="mb-3">
-                      <label class="form-label">Subject</label>
-                      <select class="form-select">
-                        <option selected disabled>Select subject</option>
-                        <option>Math</option>
-                        <option>Physics</option>
-                        <option>Chemistry</option>
-                        <option>Arabic</option>
-                        <option>English</option>
-                      </select>
-                    </div>
+  <div class="mb-3">
+    <label class="form-label">Display Name</label>
+    <input type="text" name="display_name" class="form-control"
+      value="{{ old('display_name', $profile->display_name ?? '') }}">
+  </div>
 
-                    <div class="mb-3">
-                      <label class="form-label">Branch</label>
-                      <select class="form-select">
-                        <option selected disabled>Select branch</option>
-                        <option>Scientific</option>
-                        <option>Literary</option>
-                      </select>
-                    </div>
+  <div class="mb-3">
+    <label class="form-label">Subject</label>
+    <select name="subject_id" class="form-select">
+      <option disabled {{ !$profile ? 'selected' : '' }}>Select subject</option>
+      @foreach($subjects as $s)
+        <option value="{{ $s->id }}"
+          @selected(old('subject_id', $profile->subject_id ?? null) == $s->id)>
+          {{ $s->name }}
+        </option>
+      @endforeach
+    </select>
+  </div>
 
-                    <div class="mb-3">
-                      <label class="form-label">Experience (Years)</label>
-                      <input
-                        type="number"
-                        class="form-control"
-                        placeholder="5"
-                      />
-                    </div>
+  <div class="mb-3">
+    <label class="form-label">Branch</label>
+    <select name="branch_id" class="form-select">
+      <option disabled {{ !$profile ? 'selected' : '' }}>Select branch</option>
+      @foreach($branches as $b)
+        <option value="{{ $b->id }}"
+          @selected(old('branch_id', $profile->branch_id ?? null) == $b->id)>
+          {{ $b->name }}
+        </option>
+      @endforeach
+    </select>
+  </div>
 
-                    <div class="mb-3">
-                      <label class="form-label">Phone</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="07XXXXXXXX"
-                      />
-                    </div>
+  <div class="mb-3">
+    <label class="form-label">Experience (Years)</label>
+    <input type="number" name="experience_years" class="form-control"
+      value="{{ old('experience_years', $profile->experience_years ?? 0) }}">
+  </div>
 
-                    <div class="mb-3">
-                      <label class="form-label">About</label>
-                      <textarea
-                        class="form-control"
-                        rows="4"
-                        placeholder="Short bio..."
-                      ></textarea>
-                    </div>
+  <div class="mb-3">
+    <label class="form-label">Phone</label>
+    <input type="text" name="phone" class="form-control"
+      value="{{ old('phone', $profile->phone ?? '') }}">
+  </div>
 
-                    <div class="d-grid">
-                      <button
-                        type="button"
-                        class="btn text-white"
-                        style="background-color: #5fcf80"
-                      >
-                        Save Profile
-                      </button>
-                    </div>
-                  </form>
+  <div class="mb-3">
+    <label class="form-label">About</label>
+    <textarea name="bio" class="form-control" rows="4">{{ old('bio', $profile->bio ?? '') }}</textarea>
+  </div>
+
+  <div class="d-grid">
+    <button type="submit" class="btn text-white" style="background-color:#5fcf80">
+      {{ $profile ? 'Update Profile' : 'Send For Approval' }}
+    </button>
+  </div>
+</form>
+
+@if($profile && $profile->status === 'pending')
+<form method="POST" action="{{ route('teacher.profile.delete') }}" class="mt-2">
+  @csrf
+  @method('DELETE')
+  <button type="submit" class="btn btn-outline-danger w-100">
+    Delete / Withdraw Profile
+  </button>
+</form>
+@endif
+
+
                 </div>
               </div>
             </div>

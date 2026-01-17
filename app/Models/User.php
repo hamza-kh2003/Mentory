@@ -48,4 +48,35 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+       // ===== Teacher Profile (Teacher only) =====
+    public function teacherProfile()
+    {
+        return $this->hasOne(TeacherProfile::class);
+    }
+
+    // ===== Student Requests =====
+    public function serviceRequests()
+    {
+        return $this->hasMany(ServiceRequest::class, 'student_id');
+    }
+
+    // ===== Student Reviews =====
+    public function reviews()
+    {
+        return $this->hasManyThrough(
+        Review::class,
+        ServiceRequest::class,
+        'student_id',           // FK في service_requests
+        'service_request_id',   // FK في reviews
+        'id',                   // users.id
+        'id'                    // service_requests.id
+    );
+    }
+
+    // ===== Favorites =====
+    public function favorites()
+    {
+        return $this->hasMany(Favorite::class, 'student_id');
+    }
 }

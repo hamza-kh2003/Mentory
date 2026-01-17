@@ -13,18 +13,10 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             
-          $table->id();
+           $table->id();
 
     $table->foreignId('service_request_id')
         ->constrained('service_requests')
-        ->cascadeOnDelete();
-
-    $table->foreignId('student_id')
-        ->constrained('users')
-        ->cascadeOnDelete();
-
-    $table->foreignId('teacher_profile_id')
-        ->constrained('teacher_profiles')
         ->cascadeOnDelete();
 
     $table->unsignedTinyInteger('rating');
@@ -32,9 +24,7 @@ return new class extends Migration
 
     $table->timestamps();
 
-   
-    $table->unique('service_request_id');
-
+    $table->unique('service_request_id'); // review واحد لكل request
 
         });
     }
