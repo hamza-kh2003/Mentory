@@ -34,110 +34,90 @@
                   </tr>
                 </thead>
 
-                <tbody>
-                  <!-- Row -->
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-3">
-                        <img
-                          src="{{ asset('assets/img/trainers/trainer-1.jpg') }}"
-                          style="
-                            width: 48px;
-                            height: 48px;
-                            object-fit: cover;
-                            border-radius: 10px;
-                          "
-                          alt="Teacher"
-                        />
-                        <div>
-                          <div class="fw-semibold">Mr. Ahmad Saleh</div>
-                          <div class="text-muted small">0791234567</div>
-                        </div>
-                      </div>
-                    </td>
+               
+                  <tbody>
+@forelse($profiles as $p)
+  <tr>
+    <td>
+      <div class="d-flex align-items-center gap-3">
+        <img
+          src="{{ $p->image_path ? asset('storage/'.$p->image_path) : asset('assets/img/teacher-placeholder.jpg') }}"
+          style="width:48px;height:48px;object-fit:cover;border-radius:10px;"
+          alt="Teacher"
+        />
+        <div>
+          <div class="fw-semibold">{{ $p->display_name }}</div>
+          <div class="text-muted small">{{ $p->phone }}</div>
+        </div>
+      </div>
+    </td>
 
-                    <td>Math</td>
-                    <td>Scientific</td>
+    <td>{{ $p->subject?->name }}</td>
+    <td>{{ $p->branch?->name }}</td>
 
-                    <td>
-                      <span class="badge bg-warning text-dark">Pending</span>
-                    </td>
+    <td>
+      @if($p->status === 'pending')
+        <span class="badge bg-warning text-dark">Pending</span>
+      @elseif($p->status === 'approved')
+        <span class="badge bg-success">Approved</span>
+      @else
+        <span class="badge bg-danger">Rejected</span>
+      @endif
+    </td>
 
-                    <!-- Paid column -->
-                    <td>
-                      <span class="badge bg-secondary">No</span>
-                    </td>
+    <td>
+      @if($p->is_featured)
+        <span class="badge bg-warning text-dark">Yes</span>
+      @else
+        <span class="badge bg-secondary">No</span>
+      @endif
+    </td>
 
-                    <td class="text-end">
-                      <div class="d-inline-flex gap-2">
-                        <!-- VIEW (NEW) -->
-                        <a
-                          href="{{route('admin.teacher-profile.show')}}"
-                          class="btn btn-sm btn-outline-success"
-                        >
-                          View Details
-                        </a>
+    <td class="text-end">
+      <div class="d-inline-flex gap-2">
 
-                        <!-- PAID (KEEP) -->
-                        <button type="button" class="btn btn-sm btn-outline-warning">
-                          Paid
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+        <a href="{{ route('admin.teacher-profiles.show', $p->id) }}"
+           class="btn btn-sm btn-outline-success">
+          View Details
+        </a>
 
-                  <!-- Row -->
-                  <tr>
-                    <td>
-                      <div class="d-flex align-items-center gap-3">
-                        <img
-                          src="{{ asset('assets/img/trainers/trainer-1.jpg') }}"
-                          style="
-                            width: 48px;
-                            height: 48px;
-                            object-fit: cover;
-                            border-radius: 10px;
-                          "
-                          alt="Teacher"
-                        />
-                        <div>
-                          <div class="fw-semibold">Ms. Lina Omar</div>
-                          <div class="text-muted small">0789876543</div>
-                        </div>
-                      </div>
-                    </td>
+        <form method="POST" action="{{ route('admin.teacher-profiles.approve', $p->id) }}">
+          @csrf
+          @method('PATCH')
+          <button class="btn btn-sm btn-success" @disabled($p->status === 'approved')>
+            Approve
+          </button>
+        </form>
 
-                    <td>English</td>
-                    <td>Literary</td>
+        <form method="POST" action="{{ route('admin.teacher-profiles.reject', $p->id) }}">
+          @csrf
+          @method('PATCH')
+          <button class="btn btn-sm btn-danger" @disabled($p->status === 'rejected')>
+            Reject
+          </button>
+        </form>
 
-                    <td>
-                      <span class="badge bg-success">Approved</span>
-                    </td>
+        <form method="POST" action="{{ route('admin.teacher-profiles.toggleFeatured', $p->id) }}">
+          @csrf
+          @method('PATCH')
+          <button class="btn btn-sm btn-outline-warning">
+            {{ $p->is_featured ? 'Unpaid' : 'Paid' }}
+          </button>
+        </form>
 
-                    <!-- Paid column -->
-                    <td>
-                      <span class="badge bg-warning text-dark">Yes</span>
-                    </td>
+      </div>
+    </td>
+  </tr>
+@empty
+  <tr>
+    <td colspan="6" class="text-center text-muted py-4">
+      No teacher profiles found.
+    </td>
+  </tr>
+@endforelse
+</tbody>
 
-                    <td class="text-end">
-                      <div class="d-inline-flex gap-2">
-                        <!-- VIEW (NEW) -->
-                        <a
-                          href="{{route('admin.teacher-profile.show')}}"
-                          class="btn btn-sm btn-outline-success"
-                        >
-                          View Details
-                        </a>
-
-                        <!-- PAID (KEEP) -->
-                        <button type="button" class="btn btn-sm btn-outline-warning">
-                          Paid
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-
-                </tbody>
+               
               </table>
             </div>
 

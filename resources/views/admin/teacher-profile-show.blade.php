@@ -7,19 +7,17 @@
   <div class="container-fluid container-xl" data-aos="fade-up">
     <div class="row g-4">
 
-      <!-- Sidebar -->
+      {{-- Sidebar --}}
       @include('layouts.partials.side')
 
-      <!-- Content -->
+      {{-- Content --}}
       <div class="col-12 col-lg-9">
 
-        <!-- Header -->
+        {{-- Header --}}
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div>
             <h3 class="mb-1">Teacher Profile</h3>
-            <div class="text-muted small">
-              Review teacher information before approval
-            </div>
+            <div class="text-muted small">Review teacher information before approval</div>
           </div>
 
           <a href="{{ route('admin.teacher-profiles') }}"
@@ -28,39 +26,62 @@
           </a>
         </div>
 
-        <!-- Profile Card -->
+        {{-- Messages --}}
+        @if (session('success'))
+          <div class="alert alert-success small">{{ session('success') }}</div>
+        @endif
+
+        @if (session('error'))
+          <div class="alert alert-danger small">{{ session('error') }}</div>
+        @endif
+
+        {{-- Profile Card --}}
         <div class="card shadow-sm border-0 mb-4">
           <div class="card-body">
-
             <div class="d-flex flex-column flex-md-row gap-4">
-              <!-- Image -->
+
+              {{-- Image --}}
               <img
-                src="{{ asset('assets/img/trainers/trainer-1.jpg') }}"
+                src="{{ $profile->image_path ? asset('storage/'.$profile->image_path) : asset('assets/img/teacher-placeholder.jpg') }}"
                 alt="Teacher"
                 style="width:160px;height:160px;object-fit:cover;border-radius:12px"
               />
 
-              <!-- Info -->
+              {{-- Info --}}
               <div class="flex-grow-1">
-                <h4 class="mb-1">Mr. Ahmad Saleh</h4>
+                <h4 class="mb-1">{{ $profile->display_name }}</h4>
+
                 <div class="text-muted mb-2">
-                  Math • Scientific
+                  {{ $profile->subject?->name }} • {{ $profile->branch?->name }}
                 </div>
 
                 <div class="row g-2 small mb-3">
                   <div class="col-md-6">
-                    <strong>Phone:</strong> 0791234567
+                    <strong>Phone:</strong> {{ $profile->phone }}
                   </div>
+
                   <div class="col-md-6">
-                    <strong>Experience:</strong> 8 years
+                    <strong>Experience:</strong> {{ $profile->experience_years }} years
                   </div>
+
                   <div class="col-md-6">
                     <strong>Status:</strong>
-                    <span class="badge bg-warning text-dark">Pending</span>
+                    @if($profile->status === 'pending')
+                      <span class="badge bg-warning text-dark">Pending</span>
+                    @elseif($profile->status === 'approved')
+                      <span class="badge bg-success">Approved</span>
+                    @else
+                      <span class="badge bg-danger">Rejected</span>
+                    @endif
                   </div>
+
                   <div class="col-md-6">
                     <strong>Paid:</strong>
-                    <span class="badge bg-secondary">No</span>
+                    @if($profile->is_featured)
+                      <span class="badge bg-warning text-dark">Yes</span>
+                    @else
+                      <span class="badge bg-secondary">No</span>
+                    @endif
                   </div>
                 </div>
 
@@ -68,41 +89,58 @@
 
                 <h6>About</h6>
                 <p class="text-muted mb-0">
-                  Tawjihi Math teacher focused on problem-solving strategies and
-                  exam techniques. Weekly practice tests and structured plans
-                  for each student.
+                  {{ $profile->bio ?: 'No bio provided.' }}
                 </p>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Actions -->
+        {{-- Actions --}}
         <div class="card shadow-sm border-0">
           <div class="card-body">
-            <h5 class="mb-3">Admin Actions</h5>
+            <h5 class="mb-3">Actions</h5>
 
-            <div class="d-flex flex-wrap gap-2">
-              <!-- Approve -->
-              <button class="btn text-white"
-                      style="background-color:#5fcf80">
-                Approve Profile
-              </button>
+            <div class="d-inline-flex gap-2 flex-wrap">
 
-              <!-- Reject -->
-              <button class="btn btn-outline-danger">
-                Reject Profile
-              </button>
+              {{-- Approve --}}
+              <form method="POST"
+                    action="{{ route('admin.teacher-profiles.approve', $profile->id) }}">
+                @csrf
+                @method('PATCH')
+                <button
+                  class="btn btn-sm btn-success {{ $profile->status === 'approved' ? 'opacity-50' : '' }}"
+                  {{ $profile->status === 'approved' ? 'disabled style=pointer-events:none' : '' }}>
+                  Approve
+                </button>
+              </form>
 
-              <!-- Toggle Paid -->
-              <button class="btn btn-outline-warning">
-                Mark as Paid
-              </button>
+              {{-- Reject --}}
+              <form method="POST"
+                    action="{{ route('admin.teacher-profiles.reject', $profile->id) }}">
+                @csrf
+                @method('PATCH')
+                <button
+                  class="btn btn-sm btn-danger {{ $profile->status === 'rejected' ? 'opacity-50' : '' }}"
+                  {{ $profile->status === 'rejected' ? 'disabled style=pointer-events:none' : '' }}>
+                  Reject
+                </button>
+              </form>
+
+              {{-- Paid --}}
+              <form method="POST"
+                    action="{{ route('admin.teacher-profiles.toggleFeatured', $profile->id) }}">
+                @csrf
+                @method('PATCH')
+                <button class="btn btn-sm btn-outline-warning">
+                  {{ $profile->is_featured ? 'Unpaid' : 'Paid' }}
+                </button>
+              </form>
+
             </div>
 
             <div class="text-muted small mt-3">
-              Approval controls visibility for students.  
-              Paid status controls priority in teachers list.
+              Approval controls visibility for students. Paid status controls priority in teachers list.
             </div>
           </div>
         </div>

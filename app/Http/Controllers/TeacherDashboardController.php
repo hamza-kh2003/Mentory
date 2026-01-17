@@ -7,6 +7,7 @@ use App\Models\Subject;
 use App\Models\TeacherProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\ServiceRequest;
 
 class TeacherDashboardController extends Controller
 {
@@ -28,7 +29,7 @@ class TeacherDashboardController extends Controller
     public function saveProfile(Request $request)
     {
         $user = $request->user();
-        $profile = $user->teacherProfile; // null أو موجود
+        $profile = $user->teacherProfile; 
 
         $data = $request->validate([
             'display_name' => ['required', 'string', 'max:255'],
@@ -56,13 +57,12 @@ class TeacherDashboardController extends Controller
 
             TeacherProfile::create($data);
 
-            return back()->with('success', 'تم إرسال بروفايلك للمراجعة.');
+            return back()->with('success', 'Profile submitted for review.');
         }
 
         // update
         $profile->update($data);
-
-        return back()->with('success', 'تم تحديث البروفايل.');
+        return back()->with('success', 'Profile updated successfully.');
     }
 
     public function deleteProfile(Request $request)
@@ -70,7 +70,7 @@ class TeacherDashboardController extends Controller
         $profile = $request->user()->teacherProfile;
 
         if (!$profile) {
-            return back()->with('error', 'لا يوجد بروفايل.');
+            return back()->with('error', 'No profile found');
         }
 
         if ($profile->image_path) {
@@ -79,6 +79,7 @@ class TeacherDashboardController extends Controller
 
         $profile->delete();
 
-        return back()->with('success', 'تم حذف البروفايل.');
+        return back()->with('success', 'Profile deleted successfully.');
     }
+
 }

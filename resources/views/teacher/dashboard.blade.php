@@ -16,17 +16,55 @@
               </div>
             </div>
 
-            <!-- Approval Status -->
-            <span class="badge bg-warning text-dark px-3 py-2">
-              Pending Approval
-            </span>
+             
           </div>
 
-          <!-- Info Message -->
-          <div class="alert alert-warning small">
-            Your profile is under review. Students will not see your profile
-            until admin approval.
-          </div>
+          @if (session('success'))
+  <div class="alert alert-success small">
+    {{ session('success') }}
+  </div>
+@endif
+
+@if (session('error'))
+  <div class="alert alert-danger small">
+    {{ session('error') }}
+  </div>
+@endif
+
+@if ($errors->any())
+  <div class="alert alert-danger small">
+    <ul class="mb-0">
+      @foreach ($errors->all() as $err)
+        <li>{{ $err }}</li>
+      @endforeach
+    </ul>
+  </div>
+@endif
+
+
+    {{-- Info Message --}}
+@if(!$profile)
+  <div class="alert alert-info small">
+    You haven’t created your teacher profile yet.  
+    Please fill in your information and submit your profile for admin review.
+  </div>
+
+@elseif($profile->status === 'pending')
+  <div class="alert alert-warning small">
+    Your profile is under review. Students will not see your profile until admin approval.
+  </div>
+
+@elseif($profile->status === 'rejected')
+  <div class="alert alert-danger small">
+    Your profile was rejected. Please update your information and submit again.
+  </div>
+
+@elseif($profile->status === 'approved')
+  <div class="alert alert-success small">
+    Your profile is approved and visible to students.
+  </div>
+@endif
+
 
           <div class="row g-4">
             <!-- Teacher Profile -->
@@ -105,7 +143,7 @@
   </div>
 </form>
 
-@if($profile && $profile->status === 'pending')
+@if($profile && in_array($profile->status, ['pending', 'rejected']))
 <form method="POST" action="{{ route('teacher.profile.delete') }}" class="mt-2">
   @csrf
   @method('DELETE')

@@ -3,132 +3,128 @@
 @section('title','Admin Dashboard')
 
 @section('content')
-     <section class="py-4">
-        <div class="container-fluid container-xl" data-aos="fade-up">
-          <div class="row g-4">
-            <!-- Sidebar -->
-            @include('layouts.partials.side')
+<section class="py-4">
+  <div class="container-fluid container-xl" data-aos="fade-up">
+    <div class="row g-4">
 
-            <!-- Content -->
-            <div class="col-12 col-lg-9">
-              <!-- Header -->
-              <div class="mb-3">
-                <h3 class="mb-1">Reviews</h3>
-                <div class="text-muted small">
-                  View and manage teacher reviews
-                </div>
-              </div>
+      @include('layouts.partials.side')
 
-              <!-- Reviews Table -->
-              <div class="card shadow-sm border-0">
-                <div class="card-body">
-                  <div
-                    class="d-flex justify-content-between align-items-center mb-3"
-                  >
-                    <div class="fw-semibold">All Reviews</div>
-                    <div class="text-muted small">Showing 6 reviews</div>
-                  </div>
+      <div class="col-12 col-lg-9">
+        <div class="mb-3">
+          <h3 class="mb-1">Reviews</h3>
+          <div class="text-muted small">View and manage teacher reviews</div>
+        </div>
 
-                  <div class="table-responsive">
-                    <table class="table align-middle">
-                      <thead class="table-light">
-                        <tr>
-                          <th>Student</th>
-                          <th>Teacher</th>
-                          <th>Rating</th>
-                          <th>Comment</th>
-                          <th>Created</th>
-                          <th class="text-end">Action</th>
-                        </tr>
-                      </thead>
+        @if (session('success'))
+          <div class="alert alert-success small">{{ session('success') }}</div>
+        @endif
 
-                      <tbody>
-                        <!-- Review -->
-                        <tr>
-                          <td>Hamza Ahmad</td>
-                          <td>Mr. Ahmad Saleh</td>
-                          <td>
-                            <i class="bi bi-star-fill text-warning"></i> 5
-                          </td>
-                          <td style="max-width: 320px">
-                            <div
-                              class="small"
-                              style="white-space: nowrap; overflow-x: auto"
-                            >
-                              Very clear explanation and helpful teacher. The
-                              session was long and detailed and helped me
-                              understand many concepts I struggled with during
-                              Tawjihi preparation.
-                            </div>
-                          </td>
-                          <td class="text-muted small">2026-01-12</td>
-                          <td class="text-end">
-                            <button class="btn btn-sm btn-outline-danger">
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
+        @if (session('error'))
+          <div class="alert alert-danger small">{{ session('error') }}</div>
+        @endif
 
-                        <!-- Review -->
-                        <tr>
-                          <td>Sara Khaled</td>
-                          <td>Ms. Lina Omar</td>
-                          <td>
-                            <i class="bi bi-star-fill text-warning"></i> 4
-                          </td>
-                          <td style="max-width: 320px">
-                            <div
-                              class="small"
-                              style="white-space: nowrap; overflow-x: auto"
-                            >
-                              Good teaching style but sometimes explanations
-                              take longer than expected. Still very helpful
-                              overall.
-                            </div>
-                          </td>
-                          <td class="text-muted small">2026-01-10</td>
-                          <td class="text-end">
-                            <button class="btn btn-sm btn-outline-danger">
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
+        <div class="card shadow-sm border-0">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="fw-semibold">All Reviews</div>
+              <div class="text-muted small">Showing {{ $reviews->count() }} reviews</div>
+            </div>
 
-                        <!-- Review -->
-                        <tr>
-                          <td>Omar Naser</td>
-                          <td>Mr. Yazan Khaled</td>
-                          <td>
-                            <i class="bi bi-star-fill text-warning"></i> 5
-                          </td>
-                          <td style="max-width: 320px">
-                            <div
-                              class="small"
-                              style="white-space: nowrap; overflow-x: auto"
-                            >
-                              Excellent explanations, very patient, and focuses
-                              on exam-style questions which helped me a lot.
-                            </div>
-                          </td>
-                          <td class="text-muted small">2026-01-08</td>
-                          <td class="text-end">
-                            <button class="btn btn-sm btn-outline-danger">
-                              Delete
-                            </button>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+            <div class="table-responsive">
+              <table class="table align-middle">
+                <thead class="table-light">
+                  <tr>
+                    <th>Student</th>
+                    <th>Teacher</th>
+                    <th>Rating</th>
+                    <th>Comment</th>
+                    <th>Created</th>
+                    <th class="text-end">Action</th>
+                  </tr>
+                </thead>
 
-                  <div class="text-muted small mt-2">
-                    Deleting a review will remove it permanently from the
-                    system.
-                  </div>
-                </div>
-              </div>
+                <tbody>
+                  @forelse($reviews as $r)
+                    @php
+                      $studentName = $r->serviceRequest?->student?->name ?? '—';
+                      $teacherName = $r->serviceRequest?->teacherProfile?->display_name ?? '—';
+                    @endphp
+
+                    <tr>
+                      <td>{{ $studentName }}</td>
+                      <td>{{ $teacherName }}</td>
+
+                      <td>
+                        <i class="bi bi-star-fill text-warning"></i>
+                        {{ $r->rating }}
+                      </td>
+
+                      <td style="max-width: 320px">
+                        <div class="small" style="white-space: nowrap; overflow-x: auto">
+                          {{ $r->comment ?: 'No comment.' }}
+                        </div>
+                      </td>
+
+                      <td class="text-muted small">{{ $r->created_at->format('Y-m-d') }}</td>
+
+                      <td class="text-end">
+                        <form method="POST"
+                              action="{{ route('admin.reviews.destroy', $r->id) }}"
+                              class="delete-form d-inline">
+                          @csrf
+                          @method('DELETE')
+
+                          <button type="button" class="btn btn-sm btn-outline-danger btn-delete">
+                            Delete
+                          </button>
+                        </form>
+                      </td>
+                    </tr>
+                  @empty
+                    <tr>
+                      <td colspan="6" class="text-center text-muted py-4">
+                        No reviews found.
+                      </td>
+                    </tr>
+                  @endforelse
+                </tbody>
+
+              </table>
+            </div>
+
+            <div class="text-muted small mt-2">
+              Deleting a review will remove it permanently from the system.
             </div>
           </div>
         </div>
-      </section>
+
+      </div>
+    </div>
+  </div>
+</section>
+@endsection
+
+@section('js')
+<script>
+  document.querySelectorAll('.btn-delete').forEach(button => {
+    button.addEventListener('click', () => {
+      const form = button.closest('.delete-form');
+
+      Swal.fire({
+        title: 'Confirm action',
+        text: 'Are you sure you want to delete this review?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete',
+        cancelButtonText: 'Cancel',
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
+  });
+</script>
 @endsection
