@@ -88,9 +88,20 @@
                 <hr>
 
                 <h6>About</h6>
-                <p class="text-muted mb-0">
-                  {{ $profile->bio ?: 'No bio provided.' }}
-                </p>
+              <div
+  class="text-muted small"
+  style="
+    max-height: 120px;
+    overflow-y: auto;
+    padding-right: 6px;
+
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  "
+>
+  {{ $profile->bio ?: 'No bio provided.' }}
+</div>
               </div>
             </div>
           </div>

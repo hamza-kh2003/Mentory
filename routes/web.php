@@ -8,6 +8,9 @@ use App\Http\Controllers\AdminStudentController;
 use App\Http\Controllers\AdminTeacherController;
 use App\Http\Controllers\AdminReviewController;
 use App\Http\Controllers\AdminSubjectBranchController;
+use App\Http\Controllers\TeacherListController;
+use App\Http\Controllers\TeacherDetailsController;
+use App\Http\Controllers\ServiceRequestController;
 
 
 
@@ -74,23 +77,17 @@ Route::get('/', function () {
     return view('student.home');
 })->name('pages.home');
 
-Route::get('/teachers', function () {
-    return view('student.teachers');
-})->name('pages.teachers');
 
-Route::get('/teacher-details', function () {
-    return view('student.teacher-details');
-})->name('student.teacher-details');
+Route::get('/teachers', [TeacherListController::class, 'index'])
+    ->name('pages.teachers');
+
+Route::get('/teachers/{teacherProfile}', [TeacherDetailsController::class, 'show'])
+    ->name('student.teacher-details');
 
 // Favorites بدك إياه يشتغل للجست كمان (session)
 Route::get('/favorites', function () {
     return view('student.favorites');
 })->name('student.favorites');
-
-// Requests (للجست مسموح يدخلها بس فاضية - زي ما حكيت)
-Route::get('/requests', function () {
-    return view('student.requests');
-})->name('student.requests');
 
 
 /*
@@ -112,9 +109,19 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+/*
+|--------------------------------------------------------------------------
+| Student Only
+|--------------------------------------------------------------------------
+*/
+
 Route::middleware(['auth', 'role:student'])->group(function () {
-    // مبدئياً انت مخلي requests + favorites متاحين للكل، فهون مش لازم تحطهم
-    // بس لاحقاً لما تعمل أفعال (POST/DELETE) خلّيها هون للطالب فقط
+   Route::get('/requests', [ServiceRequestController::class, 'index'])
+    ->name('student.requests');
+
+Route::post('/teachers/{teacherProfile}/requests', [ServiceRequestController::class, 'store'])
+    ->name('student.requests.store');
+
 });
 
 

@@ -1,66 +1,107 @@
 @extends('layouts.master')
 
-@section('title','Requests')
+@section('title','My Requests')
 
 @section('content')
-    
-   <section class="py-4">
-        <div class="container" data-aos="fade-up">
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-              <h3 class="mb-1">My Requests</h3>
-              <p class="text-muted small mb-0">
-                Track your service requests status
-              </p>
-            </div>
+<section class="py-4">
+  <div class="container" data-aos="fade-up">
 
-          </div>
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h3 class="mb-1">My Requests</h3>
+        <p class="text-muted small mb-0">
+          Track your lesson requests status
+        </p>
+      </div>
+    </div>
 
-          <div class="row g-3">
-            <!-- Request -->
-            <div class="col-12">
-              <div class="card shadow-sm border-0">
-                <div
-                  class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3"
-                >
-                  <div>
-                    <h6 class="mb-1">Mr. Ahmad Saleh</h6>
-                    <div class="text-muted small">Math • Scientific</div>
-                  </div>
+    <!-- Alerts -->
+    @if(session('success'))
+      <div class="alert alert-success">
+        {{ session('success') }}
+      </div>
+    @endif
 
-                  <div>
-                    <span class="badge bg-warning text-dark px-3 py-2">
-                      Pending
-                    </span>
-                  </div>
+    @if(session('error'))
+      <div class="alert alert-danger">
+        {{ session('error') }}
+      </div>
+    @endif
+
+    <!-- Requests List -->
+    <div class="row g-3">
+
+      @forelse($requests as $req)
+        <div class="col-12">
+          <div class="card shadow-sm border-0">
+            <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">
+
+              <!-- Teacher Info -->
+              <div>
+                <h6 class="mb-1">
+                  {{ $req->teacherProfile->display_name }}
+                </h6>
+                <div class="text-muted small">
+                  {{ $req->teacherProfile->subject?->name }}
+                  •
+                  {{ $req->teacherProfile->branch?->name }}
                 </div>
               </div>
-            </div>
 
-            <!-- Request -->
-            <div class="col-12">
-              <div class="card shadow-sm border-0">
-                <div
-                  class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3"
-                >
-                  <div>
-                    <h6 class="mb-1">Ms. Lina Omar</h6>
-                    <div class="text-muted small">English • Literary</div>
-                  </div>
+              <!-- Right Side: Status + Action -->
+              <div class="d-flex align-items-center gap-2">
 
-                  <div>
-                    <span class="badge bg-success px-3 py-2"> Completed </span>
-                  </div>
-                </div>
+                @php
+                  $badgeClass = match($req->status) {
+                    'pending'   => 'bg-warning text-dark',
+                    'accepted'  => 'bg-info text-dark',
+                    'completed' => 'bg-success',
+                    'rejected'  => 'bg-danger',
+                    default     => 'bg-secondary',
+                  };
+                @endphp
+
+                <span class="badge {{ $badgeClass }} px-3 py-2">
+                  {{ ucfirst($req->status) }}
+                </span>
+
+                {{-- Action button appears ONLY when completed --}}
+                @if($req->status === 'completed')
+                  <a
+                    href="{{ route('student.teacher-details', $req->teacherProfile->id) }}#add-review"
+                    class="btn btn-sm btn-outline-success"
+                  >
+                    Rate Teacher
+                  </a>
+                @endif
+
               </div>
-            </div>
-          </div>
 
-          <div class="text-muted small mt-3">
-            You can rate and comment on a teacher only after the request is
-            marked as
-            <strong>Completed</strong>.
+            </div>
           </div>
         </div>
-      </section>
+      @empty
+        <div class="col-12 text-center text-muted py-5">
+          You have no requests yet.
+        </div>
+      @endforelse
+
+    </div>
+
+    <!-- Pagination -->
+    @if($requests->hasPages())
+      <div class="mt-4 d-flex justify-content-center">
+        {{ $requests->links('pagination::bootstrap-5') }}
+      </div>
+    @endif
+
+    <!-- Footer Note -->
+    <div class="text-muted small mt-3">
+      You can rate and comment on a teacher only after the request is marked as
+      <strong>Completed</strong>.
+    </div>
+
+  </div>
+</section>
 @endsection
