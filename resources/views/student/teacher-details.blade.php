@@ -4,11 +4,34 @@
 
 @section('content')
 <section class="py-4">
+  
   <div class="container" data-aos="fade-up">
     <div class="row g-4">
 
       <!-- Left: Teacher Info -->
       <div class="col-12 col-lg-8">
+              @if(session('success'))
+  <div class="alert alert-success">
+    {{ session('success') }}
+  </div>
+@endif
+
+@if(session('error'))
+  <div class="alert alert-danger">
+    {{ session('error') }}
+  </div>
+@endif
+
+@if($errors->any())
+  <div class="alert alert-danger">
+    <ul class="mb-0">
+      @foreach($errors->all() as $err)
+        <li>{{ $err }}</li>
+      @endforeach
+    </ul>
+  </div>
+@endif
+
         <div class="card shadow-sm border-0">
           <div class="card-body">
             <div class="d-flex flex-column flex-md-row gap-3">
@@ -97,6 +120,7 @@
           </div>
         </div>
 
+    
         <!-- Reviews Section -->
         <div class="card shadow-sm border-0 mt-4">
           <div class="card-body">
@@ -111,95 +135,130 @@
               <div class="text-muted">No reviews yet.</div>
             @else
               @foreach($reviews as $r)
-                <div class="border rounded p-3 mb-3">
-                  <div class="d-flex justify-content-between align-items-start">
-                    <div>
-                      <div class="fw-semibold">
-                        {{ $r->serviceRequest?->student?->name ?? 'Student' }}
-                      </div>
-                      <div class="text-muted small">
-                        {{ $teacher->subject?->name }} • {{ $teacher->branch?->name }}
-                      </div>
-                    </div>
+                    <div class="border rounded p-3 mb-3 bg-light">
 
-                    <div class="text-end small">
-                      <i class="bi bi-star-fill text-warning"></i>
-                      <strong>{{ number_format($r->rating, 1) }}</strong>
-                      <div class="text-muted">
-                        {{ $r->created_at->diffForHumans() }}
-                      </div>
-                    </div>
-                  </div>
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-start mb-2">
 
-                  @if($r->comment)
-                    <p class="mb-0 mt-2 text-muted">
-                      {{ $r->comment }}
-                    </p>
-                  @endif
-                </div>
+      <!-- Left: Avatar + Name -->
+      <div class="d-flex align-items-center gap-2">
+        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center"
+             style="width:36px;height:36px;font-size:14px;">
+          {{ strtoupper(substr($r->serviceRequest?->student?->name ?? 'S', 0, 1)) }}
+        </div>
+
+        <div>
+          <div class="fw-semibold small">
+            {{ $r->serviceRequest?->student?->name ?? 'Student' }}
+          </div>
+          <div class="text-muted small">
+            {{ $r->created_at->diffForHumans() }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Rating -->
+      <div class="text-end small">
+        <i class="bi bi-star-fill text-warning"></i>
+        <strong>{{ number_format($r->rating, 1) }}</strong>
+      </div>
+
+    </div>
+
+    <!-- Comment -->
+    @if($r->comment)
+      <div class="bg-white rounded p-2 small text-muted">
+        {{ $r->comment }}
+      </div>
+    @endif
+
+    <!-- Delete (only owner) -->
+    @if(auth()->check() && auth()->user()->role === 'student' && $r->serviceRequest?->student_id === auth()->id())
+      <form method="POST"
+            action="{{ route('student.reviews.destroy', $r->id) }}"
+            class="mt-2 text-end">
+        @csrf
+        @method('DELETE')
+
+        <button type="button"
+        class="btn btn-sm btn-outline-danger js-delete-review" >
+        <i class="bi bi-trash"></i>
+         </button>
+
+      </form>
+    @endif
+
+  </div>
               @endforeach
             @endif
 
-            <div class="alert alert-warning small mb-0">
-              You can leave a review only after the teacher marks your request as
-              <strong>Completed</strong>.
-            </div>
           </div>
         </div>
 
-        <!-- Add Review (static for now) -->
-        <div class="card shadow-sm border-0 mt-4 " id="add-review">
-          <div class="card-body">
-            <h5 class="mb-3">Add Your Review</h5>
+        <!-- Add Review -->
+<div class="card shadow-sm border-0 mt-4" id="add-review">
+  <div class="card-body">
+    <h5 class="mb-3">Add Your Review</h5>
 
-            <form>
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Your Rating</label>
-                <div class="d-flex gap-2">
-                  @for($i = 5; $i >= 1; $i--)
-                    <input
-                      type="radio"
-                      class="btn-check"
-                      name="rating"
-                      id="rate{{ $i }}"
-                    />
-                    <label class="btn btn-outline-warning" for="rate{{ $i }}">
-                      {{ $i }} ★
-                    </label>
-                  @endfor
-                </div>
-              </div>
+    @if($reviewableRequest)
+      <form method="POST" action="{{ route('student.reviews.store', $reviewableRequest->id) }}">
+        @csrf
 
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Your Comment</label>
-                <textarea
-                  class="form-control"
-                  rows="4"
-                  placeholder="Share your experience with this teacher..."
-                ></textarea>
-              </div>
-
-              <div class="d-grid">
-                <button
-                  type="submit"
-                  class="btn text-white"
-                  style="background-color:#5fcf80"
-                >
-                  Submit Review
-                </button>
-              </div>
-
-              <div class="text-muted small mt-2">
-                You can submit only one review per completed request.
-              </div>
-            </form>
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Your Rating</label>
+          <div class="d-flex gap-2 flex-wrap">
+            @for($i = 5; $i >= 1; $i--)
+              <input
+                type="radio"
+                class="btn-check"
+                name="rating"
+                value="{{ $i }}"
+                id="rate{{ $i }}"
+                required
+              />
+              <label class="btn btn-outline-warning" for="rate{{ $i }}">
+                {{ $i }} ★
+              </label>
+            @endfor
           </div>
         </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Your Comment</label>
+          <textarea
+            class="form-control"
+            name="comment"
+            rows="4"
+            placeholder="Share your experience with this teacher..."
+          ></textarea>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn text-white" style="background-color:#5fcf80">
+            Submit Review
+          </button>
+        </div>
+
+        <div class="text-muted small mt-2">
+          You can submit only one review per completed request.
+        </div>
+      </form>
+    @else
+      <div class="alert alert-warning  small mb-0">
+        You can leave a review only after the teacher marks your request as <strong>Completed</strong>,
+        and only if you haven’t reviewed that request yet.
+      </div>
+    @endif
+
+  </div>
+</div>
+
       </div>
 
       <!-- Right: Actions -->
       <div class="col-12 col-lg-4">
         <div class="card shadow-sm border-0 position-sticky" style="top:110px">
+          
           <div class="card-body">
             <h5 class="mb-2">Request Service</h5>
             <p class="text-muted small">
@@ -220,7 +279,7 @@
         </button>
       </form>
     @else
-      <button type="button" class="btn btn-secondary w-100" disabled>
+      <button type="button" class="btn btn-secondary w-100 "  disabled>
         Request Lesson
       </button>
     @endif
@@ -264,4 +323,33 @@
     </div>
   </div>
 </section>
+@endsection
+
+
+@section('js')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.js-delete-review').forEach(button => {
+    button.addEventListener('click', function (e) {
+      const form = this.closest('form');
+
+      Swal.fire({
+        title: 'Delete review?',
+        text: 'This action cannot be undone.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Yes, delete',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      });
+    });
+  });
+});
+</script>
+
 @endsection

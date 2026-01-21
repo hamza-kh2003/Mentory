@@ -15,9 +15,8 @@
           <ul>
             {{-- ================= GUEST ================= --}}
     @guest
+      <li><a href="{{ route('pages.home') }}">HOME</a></li>
       <li><a href="{{ route('pages.teachers') }}">TEACHERS</a></li>
-      <li><a href="{{ route('student.requests') }}">My REQUESTS</a></li>
-      <li><a href="{{ route('student.favorites') }}">My FAVORITES</a></li>
       <li><a href="{{ route('login') }}">LOGIN</a></li>
     @endguest
 
@@ -27,6 +26,7 @@
 
       {{-- STUDENT --}}
       @if($role === 'student')
+      <li><a href="{{ route('pages.home') }}">HOME</a></li>
         <li><a href="{{ route('pages.teachers') }}">TEACHERS</a></li>
         <li><a href="{{ route('student.requests') }}">My REQUESTS</a></li>
         <li><a href="{{ route('student.favorites') }}">My FAVORITES</a></li>
@@ -42,6 +42,8 @@
 
       {{-- TEACHER (فقط 3 روابط) --}}
       @if($role === 'teacher')
+          <li><a href="{{ route('pages.home') }}">HOME</a></li>
+         <li><a href="{{ route('pages.teachers') }}">TEACHERS</a></li>
         <li><a href="{{ route('teacher.dashboard') }}">TEACHER PANEL</a></li>
         <li><a href="{{ route('pages.account') }}">MY ACCOUNT</a></li>
 
@@ -55,6 +57,8 @@
 
       {{-- ADMIN (فقط 3 روابط) --}}
       @if($role === 'admin')
+          <li><a href="{{ route('pages.home') }}">HOME</a></li>
+         <li><a href="{{ route('pages.teachers') }}">TEACHERS</a></li>
         <li><a href="{{ route('admin.teacher-profiles') }}">ADMIN PANEL</a></li>
         <li><a href="{{ route('pages.account') }}">MY ACCOUNT</a></li>
 

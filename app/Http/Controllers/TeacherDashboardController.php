@@ -81,5 +81,55 @@ class TeacherDashboardController extends Controller
 
         return back()->with('success', 'Profile deleted successfully.');
     }
+    
+
+    public function acceptRequest(Request $request, ServiceRequest $serviceRequest)
+{
+    $profile = $request->user()->teacherProfile;
+
+    if (!$profile || $serviceRequest->teacher_profile_id !== $profile->id) {
+        abort(403);
+    }
+
+    if ($serviceRequest->status !== 'pending') {
+        return back()->with('error', 'Only pending requests can be accepted.');
+    }
+
+    $serviceRequest->update(['status' => 'accepted']);
+    return back()->with('success', 'Request accepted successfully.');
+}
+
+public function rejectRequest(Request $request, ServiceRequest $serviceRequest)
+{
+    $profile = $request->user()->teacherProfile;
+
+    if (!$profile || $serviceRequest->teacher_profile_id !== $profile->id) {
+        abort(403);
+    }
+
+    if (!in_array($serviceRequest->status, ['pending', 'accepted'])) {
+        return back()->with('error', 'Only pending/accepted requests can be rejected.');
+    }
+
+    $serviceRequest->update(['status' => 'rejected']);
+    return back()->with('success', 'Request rejected successfully.');
+}
+
+public function completeRequest(Request $request, ServiceRequest $serviceRequest)
+{
+    $profile = $request->user()->teacherProfile;
+
+    if (!$profile || $serviceRequest->teacher_profile_id !== $profile->id) {
+        abort(403);
+    }
+
+    if ($serviceRequest->status !== 'accepted') {
+        return back()->with('error', 'Only accepted requests can be completed.');
+    }
+
+    $serviceRequest->update(['status' => 'completed']);
+    return back()->with('success', 'Request marked as completed.');
+}
+
 
 }

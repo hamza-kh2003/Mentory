@@ -11,6 +11,7 @@ use App\Http\Controllers\AdminSubjectBranchController;
 use App\Http\Controllers\TeacherListController;
 use App\Http\Controllers\TeacherDetailsController;
 use App\Http\Controllers\ServiceRequestController;
+use App\Http\Controllers\StudentReviewController;
 
 
 
@@ -122,6 +123,13 @@ Route::middleware(['auth', 'role:student'])->group(function () {
 Route::post('/teachers/{teacherProfile}/requests', [ServiceRequestController::class, 'store'])
     ->name('student.requests.store');
 
+ Route::post('/requests/{serviceRequest}/reviews', [StudentReviewController::class, 'store'])
+    ->name('student.reviews.store');
+
+    
+Route::delete('/reviews/{review}', [StudentReviewController::class, 'destroy'])
+    ->name('student.reviews.destroy');
+
 });
 
 
@@ -139,6 +147,16 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
 
     Route::delete('/teacher/profile', [TeacherDashboardController::class, 'deleteProfile'])
         ->name('teacher.profile.delete');
+
+        
+          Route::patch('/teacher/requests/{serviceRequest}/accept', [TeacherDashboardController::class, 'acceptRequest'])
+        ->name('teacher.requests.accept');
+
+    Route::patch('/teacher/requests/{serviceRequest}/reject', [TeacherDashboardController::class, 'rejectRequest'])
+        ->name('teacher.requests.reject');
+
+    Route::patch('/teacher/requests/{serviceRequest}/complete', [TeacherDashboardController::class, 'completeRequest'])
+        ->name('teacher.requests.complete');
 
 
 });

@@ -15,9 +15,9 @@ class ServiceRequestController extends Controller
 
         $requests = ServiceRequest::query()
             ->where('student_id', $studentId)
-            ->with(['teacherProfile.subject', 'teacherProfile.branch'])
+            ->with(['review','teacherProfile.subject', 'teacherProfile.branch'])
             ->latest()
-            ->paginate(10);
+            ->paginate(6);
 
         return view('student.requests', compact('requests'));
     }
@@ -48,8 +48,7 @@ class ServiceRequestController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->route('student.requests')
-            ->with('success', 'Request sent successfully.');
+        return back()->with('success', 'Request sent successfully.');
     }
 }
 

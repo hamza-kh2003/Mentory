@@ -197,9 +197,6 @@
 
 @if($teachers->hasPages())
   <div class="pagination-wrapper mt-4 d-flex justify-content-center">
-
-  
-
     {{ $teachers->links('pagination::bootstrap-5') }}
   </div>
 @endif

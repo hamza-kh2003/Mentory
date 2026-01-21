@@ -181,99 +181,89 @@
                           <th class="text-end">Actions</th>
                         </tr>
                       </thead>
+           <tbody>
+  @forelse($requests as $req)
+    @php
+      $badgeClass = match($req->status) {
+        'pending'   => 'bg-warning text-dark',
+        'accepted'  => 'bg-info text-dark',
+        'completed' => 'bg-success',
+        'rejected'  => 'bg-danger',
+        default     => 'bg-secondary',
+      };
+    @endphp
 
-                      <tbody>
-                        <tr>
-                          <td>
-                            <div class="fw-semibold">Student A</div>
-                            <div class="text-muted small">
-                              Math • Scientific
-                            </div>
-                          </td>
-                          <td class="text-muted">0791234567</td>
-                          <td>
-                            <span class="badge bg-warning text-dark"
-                              >Pending</span
-                            >
-                          </td>
-                          <td class="text-end">
-                            <div class="d-inline-flex gap-2">
-                              <button
-                                class="btn btn-sm text-white"
-                                style="background-color: #5fcf80"
-                              >
-                                Accept
-                              </button>
-                              <button class="btn btn-sm btn-outline-danger">
-                                Cancel
-                              </button>
-                              <button class="btn btn-sm btn-outline-success">
-                                Complete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
+    <tr>
+      <td>
+        <div class="fw-semibold">{{ $req->student?->name ?? 'Student' }}</div>
+        
+        <div class="text-muted small">
+          <i class="bi bi-calendar3 me-1"></i>
+          {{ $req->created_at->format('d M Y') }}
+        </div>
+      </td>
 
-                        <tr>
-                          <td>
-                            <div class="fw-semibold">Student B</div>
-                            <div class="text-muted small">
-                              English • Literary
-                            </div>
-                          </td>
-                          <td class="text-muted">0789876543</td>
-                          <td>
-                            <span class="badge bg-info text-dark"
-                              >Accepted</span
-                            >
-                          </td>
-                          <td class="text-end">
-                            <div class="d-inline-flex gap-2">
-                              <button
-                                class="btn btn-sm text-white"
-                                style="background-color: #5fcf80"
-                              >
-                                Accept
-                              </button>
-                              <button class="btn btn-sm btn-outline-danger">
-                                Cancel
-                              </button>
-                              <button class="btn btn-sm btn-outline-success">
-                                Complete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
+      <td class="text-muted">{{ $req->student?->phone ?? '—' }}</td>
 
-                        <tr>
-                          <td>
-                            <div class="fw-semibold">Student C</div>
-                            <div class="text-muted small">
-                              Physics • Scientific
-                            </div>
-                          </td>
-                          <td class="text-muted">0775554433</td>
-                          <td>
-                            <span class="badge bg-success">Completed</span>
-                          </td>
-                          <td class="text-end">
-                            <div class="d-inline-flex gap-2">
-                              <button
-                                class="btn btn-sm text-white"
-                                style="background-color: #5fcf80"
-                              >
-                                Accept
-                              </button>
-                              <button class="btn btn-sm btn-outline-danger">
-                                Cancel
-                              </button>
-                              <button class="btn btn-sm btn-outline-success">
-                                Complete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      </tbody>
+      <td>
+        <span class="badge {{ $badgeClass }}">
+          {{ ucfirst($req->status) }}
+        </span>
+      </td>
+
+      <td class="text-end">
+        <div class="d-inline-flex gap-2">
+
+          {{-- Accept: فقط لو Pending --}}
+          @if($req->status === 'pending')
+            <form method="POST" action="{{ route('teacher.requests.accept', $req->id) }}">
+              @csrf
+              @method('PATCH')
+              <button class="btn btn-sm text-white" style="background-color:#5fcf80">
+                Accept
+              </button>
+            </form>
+          @endif
+
+          {{-- Reject: لو Pending أو Accepted --}}
+          @if(in_array($req->status, ['pending', 'accepted']))
+            <form method="POST" action="{{ route('teacher.requests.reject', $req->id) }}">
+              @csrf
+              @method('PATCH')
+              <button class="btn btn-sm btn-outline-danger">
+                Reject
+              </button>
+            </form>
+          @endif
+
+          {{-- Complete: فقط لو Accepted --}}
+          @if($req->status === 'accepted')
+            <form method="POST" action="{{ route('teacher.requests.complete', $req->id) }}">
+              @csrf
+              @method('PATCH')
+              <button class="btn btn-sm btn-outline-success">
+                Complete
+              </button>
+            </form>
+          @endif
+
+          {{-- Completed/Rejected --}}
+          @if(in_array($req->status, ['completed','rejected']))
+            <button class="btn btn-sm btn-secondary" disabled>Done</button>
+          @endif
+
+        </div>
+      </td>
+    </tr>
+  @empty
+    <tr>
+      <td colspan="4" class="text-center text-muted py-4">
+        No requests yet.
+      </td>
+    </tr>
+  @endforelse
+</tbody>
+
                     </table>
                   </div>
 
