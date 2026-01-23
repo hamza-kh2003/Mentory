@@ -62,7 +62,7 @@
 
                   <div>
                     <h6 class="mb-1">
-                      {{ $req->teacherProfile->display_name }}
+                      Tr-{{ $req->teacherProfile->display_name }}
                     </h6>
 
                     <div class="text-muted small mb-1">
@@ -88,17 +88,17 @@
                   </span>
 
                   @if($req->teacherProfile->status !== 'approved')
-  <button type="button" class="btn btn-sm btn-secondary" disabled title="Teacher profile is not available right now">
-    Unavailable
-  </button>
-@else
+                 <button type="button" class="btn btn-sm btn-secondary" disabled title="Teacher profile is not available right now">
+                 Unavailable
+                </button>
 
-@if($req->status === 'completed' && !$req->review)
-  <a href="{{ route('student.teacher-details', $req->teacherProfile->id) }}#add-review"
-     class="btn btn-sm btn-outline-success">
-    <i class="bi bi-star me-1"></i>
-    Rate Teacher
-  </a>
+                 @else
+               @if($req->status === 'completed' && !$req->review)
+              <a href="{{ route('student.teacher-details', $req->teacherProfile->id) }}#add-review"
+               class="btn btn-sm btn-outline-success">
+              <i class="bi bi-star me-1"></i>
+              Rate Teacher
+             </a>
 
 @elseif($req->status === 'completed' && $req->review)
   <button type="button" class="btn btn-sm btn-outline-secondary" disabled>
@@ -134,6 +134,12 @@
 
     </div>
 
+     <!-- Footer Note -->
+    <div class="text-muted small mt-3">
+      You can rate and comment on a teacher only after the request is marked as
+      <strong>Completed</strong>.
+    </div>
+
     <!-- Pagination -->
     @if($requests->hasPages())
   <div class="pagination-wrapper mt-4 d-flex justify-content-center">
@@ -141,11 +147,7 @@
   </div>
 @endif
 
-    <!-- Footer Note -->
-    <div class="text-muted small mt-3">
-      You can rate and comment on a teacher only after the request is marked as
-      <strong>Completed</strong>.
-    </div>
+  
 
   </div>
 </section>

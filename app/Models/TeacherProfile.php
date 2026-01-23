@@ -61,4 +61,10 @@ class TeacherProfile extends Model
     );
 }
 
+public function favorites()
+{
+    return $this->hasMany(\App\Models\Favorite::class);
+}
+
+
 }

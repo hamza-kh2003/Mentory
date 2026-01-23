@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\TeacherProfile;
 use Illuminate\Http\Request;
 use App\Models\ServiceRequest;
+use App\Models\Favorite;
 
 class TeacherDetailsController extends Controller
 {
@@ -38,12 +39,22 @@ if ($request->user() && $request->user()->role === 'student') {
         ->latest()
         ->first();
 }
-  
 
+$isFavorited = false;
+
+if ($request->user() && $request->user()->role === 'student') {
+    $isFavorited = Favorite::where('student_id', $request->user()->id)
+        ->where('teacher_profile_id', $teacherProfile->id)
+        ->exists();
+}
+
+  
         return view('student.teacher-details', [
             'teacher' => $teacherProfile,
             'reviews' => $reviews,
             'reviewableRequest' => $reviewableRequest,
+            'isFavorited' => $isFavorited,
+
         ]);
     }
 }

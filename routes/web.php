@@ -12,6 +12,10 @@ use App\Http\Controllers\TeacherListController;
 use App\Http\Controllers\TeacherDetailsController;
 use App\Http\Controllers\ServiceRequestController;
 use App\Http\Controllers\StudentReviewController;
+use App\Http\Controllers\AccountController;
+use App\Http\Controllers\FavoriteController;
+
+
 
 
 
@@ -85,11 +89,6 @@ Route::get('/teachers', [TeacherListController::class, 'index'])
 Route::get('/teachers/{teacherProfile}', [TeacherDetailsController::class, 'show'])
     ->name('student.teacher-details');
 
-// Favorites بدك إياه يشتغل للجست كمان (session)
-Route::get('/favorites', function () {
-    return view('student.favorites');
-})->name('student.favorites');
-
 
 /*
 |--------------------------------------------------------------------------
@@ -98,10 +97,17 @@ Route::get('/favorites', function () {
 */
 Route::middleware(['auth'])->group(function () {
 
-    // My Account (بدها login للجميع: student/teacher/admin)
-    Route::get('/account', function () {
-        return view('pages.account');
-    })->name('pages.account');
+Route::get('/account', [AccountController::class, 'edit'])->name('pages.account');
+
+Route::patch('/account', [AccountController::class, 'updateProfile'])
+    ->name('account.update');
+
+Route::put('/account/password', [AccountController::class, 'updatePassword'])
+    ->name('account.password.update');
+
+Route::delete('/account', [AccountController::class, 'destroy'])
+    ->name('account.destroy');
+    
 
     // Breeze profile routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -129,6 +135,17 @@ Route::post('/teachers/{teacherProfile}/requests', [ServiceRequestController::cl
     
 Route::delete('/reviews/{review}', [StudentReviewController::class, 'destroy'])
     ->name('student.reviews.destroy');
+
+
+Route::get('/favorites', [FavoriteController::class, 'index'])
+     ->name('student.favorites');
+
+ Route::post('/teachers/{teacherProfile}/favorite', [FavoriteController::class, 'toggle'])
+     ->name('student.favorites.toggle');
+
+ Route::delete('/favorites/{favorite}', [FavoriteController::class, 'destroy'])
+    ->name('student.favorites.destroy');
+
 
 });
 
