@@ -47,224 +47,124 @@
     </section>
     <!-- /Hero Section -->
 
-    <!-- Featured Teachers -->
-    <section id="featured-teachers" class="section py-5">
-        <div class="container">
-            <div class="section-header text-center mb-5">
-                <h2>Featured Teachers</h2>
-                <p class="text-muted">Top mentors highlighted by admin</p>
-            </div>
+       <!-- Featured Teachers -->
+<section id="featured-teachers" class="section py-5">
+  <div class="container">
+    <div class="section-header text-center mb-5">
+      <h2>Top Rated Teachers</h2>
+      <p class="text-muted">Highest rated mentors based on real student reviews</p>
+    </div>
 
-            <div id="featuredTeachersCarousel" class="carousel slide" data-bs-ride="carousel">
-                <div class="carousel-inner">
-                    <!-- Slide 1 -->
-                    <div class="carousel-item active">
-                        <div class="row g-4">
-                            <!-- Teacher 1 -->
-                            <div class="col-md-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?fit=crop&w=400&h=300&q=80" 
-                                         class="card-img-top"
-                                         style="height:220px;object-fit:cover" 
-                                         alt="Teacher">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <h5 class="mb-0 fw-bold">Mr. Ahmad Saleh</h5>
-                                            <span class="badge" style="background-color: #5fcf80; color: white;">Featured</span>
-                                        </div>
-                                        <div class="text-muted small mb-3">Math • Scientific</div>
-                                        <div class="d-flex align-items-center mb-4">
-                                            <div class="text-warning me-2">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-half"></i>
-                                            </div>
-                                            <span class="text-muted ms-2">4.8 (120)</span>
-                                        </div>
-                                        <a href="#" class="btn w-100" style="background-color: #5fcf80; color: white;">
-                                            View Details
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+    @php
+      // 3 cards per slide
+      $chunks = $topTeachers->chunk(3);
+    @endphp
 
-                            <!-- Teacher 2 -->
-                            <div class="col-md-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <img src="https://images.unsplash.com/photo-1582750433449-648ed127bb54?fit=crop&w=400&h=300&q=80" 
-                                         class="card-img-top"
-                                         style="height:220px;object-fit:cover" 
-                                         alt="Teacher">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <h5 class="mb-0 fw-bold">Ms. Sarah Johnson</h5>
-                                            <span class="badge" style="background-color: #5fcf80; color: white;">Featured</span>
-                                        </div>
-                                        <div class="text-muted small mb-3">English • Literary</div>
-                                        <div class="d-flex align-items-center mb-4">
-                                            <div class="text-warning me-2">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <span class="text-muted ms-2">4.9 (98)</span>
-                                        </div>
-                                        <a href="#" class="btn w-100" style="background-color: #5fcf80; color: white;">
-                                            View Details
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+    @if($topTeachers->isEmpty())
+      <div class="text-center text-muted py-5 border rounded bg-light">
+        <i class="bi bi-star display-6 d-block mb-2"></i>
+        No rated teachers yet.
+      </div>
+    @else
 
-                            <!-- Teacher 3 -->
-                            <div class="col-md-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=400&h=300&q=80" 
-                                         class="card-img-top"
-                                         style="height:220px;object-fit:cover" 
-                                         alt="Teacher">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <h5 class="mb-0 fw-bold">Dr. Michael Chen</h5>
-                                            <span class="badge" style="background-color: #5fcf80; color: white;">Featured</span>
-                                        </div>
-                                        <div class="text-muted small mb-3">Physics • Scientific</div>
-                                        <div class="d-flex align-items-center mb-4">
-                                            <div class="text-warning me-2">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                            <span class="text-muted ms-2">4.7 (76)</span>
-                                        </div>
-                                        <a href="#" class="btn w-100" style="background-color: #5fcf80; color: white;">
-                                            View Details
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+      <div id="featuredTeachersCarousel" class="carousel slide" data-bs-ride="carousel">
+
+        {{-- Indicators (اختياري بس حلو) --}}
+        @if($chunks->count() > 1)
+          <div class="carousel-indicators" style="bottom:-45px;">
+            @foreach($chunks as $i => $c)
+              <button type="button"
+                      data-bs-target="#featuredTeachersCarousel"
+                      data-bs-slide-to="{{ $i }}"
+                      class="{{ $i === 0 ? 'active' : '' }}"
+                      aria-current="{{ $i === 0 ? 'true' : 'false' }}"
+                      aria-label="Slide {{ $i+1 }}"></button>
+            @endforeach
+          </div>
+        @endif
+
+        <div class="carousel-inner">
+          @foreach($chunks as $index => $group)
+            <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+              <div class="row g-4">
+
+                @foreach($group as $t)
+                  <div class="col-md-4">
+                    <div class="card shadow-sm border-0 h-100">
+                      <img
+                        src="{{ $t->image_path
+                              ? asset('storage/'.$t->image_path)
+                              : asset('assets/img/teacher-placeholder.jpg') }}"
+                        class="card-img-top"
+                        style="height:220px;object-fit:cover"
+                        alt="Teacher"
+                      >
+
+                      <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                          <h5 class="mb-0 fw-bold">{{ $t->display_name }}</h5>
+
+                          <span class="badge" style="background-color:#5fcf80; color:white;">
+                            Top Rated
+                          </span>
                         </div>
-                    </div>
 
-                    <!-- Slide 2 -->
-                    <div class="carousel-item">
-                        <div class="row g-4">
-                            <!-- Teacher 4 -->
-                            <div class="col-md-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?fit=crop&w=400&h=300&q=80" 
-                                         class="card-img-top"
-                                         style="height:220px;object-fit:cover" 
-                                         alt="Teacher">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <h5 class="mb-0 fw-bold">Prof. Elena Rodriguez</h5>
-                                            <span class="badge" style="background-color: #5fcf80; color: white;">Featured</span>
-                                        </div>
-                                        <div class="text-muted small mb-3">Chemistry • Scientific</div>
-                                        <div class="d-flex align-items-center mb-4">
-                                            <div class="text-warning me-2">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-half"></i>
-                                            </div>
-                                            <span class="text-muted ms-2">4.6 (64)</span>
-                                        </div>
-                                        <a href="#" class="btn w-100" style="background-color: #5fcf80; color: white;">
-                                            View Details
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Teacher 5 -->
-                            <div class="col-md-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <img src="https://images.unsplash.com/photo-1544717305-99670f9c28c6?fit=crop&w=400&h=300&q=80" 
-                                         class="card-img-top"
-                                         style="height:220px;object-fit:cover" 
-                                         alt="Teacher">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <h5 class="mb-0 fw-bold">Mr. Omar Yousef</h5>
-                                            <span class="badge" style="background-color: #5fcf80; color: white;">Featured</span>
-                                        </div>
-                                        <div class="text-muted small mb-3">Arabic • Literary</div>
-                                        <div class="d-flex align-items-center mb-4">
-                                            <div class="text-warning me-2">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star"></i>
-                                            </div>
-                                            <span class="text-muted ms-2">4.5 (51)</span>
-                                        </div>
-                                        <a href="#" class="btn w-100" style="background-color: #5fcf80; color: white;">
-                                            View Details
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Teacher 6 -->
-                            <div class="col-md-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <img src="https://images.unsplash.com/photo-1542740348-39501cd6e2b4?fit=crop&w=400&h=300&q=80" 
-                                         class="card-img-top"
-                                         style="height:220px;object-fit:cover" 
-                                         alt="Teacher">
-                                    <div class="card-body p-4">
-                                        <div class="d-flex justify-content-between align-items-start mb-2">
-                                            <h5 class="mb-0 fw-bold">Ms. Lina Omar</h5>
-                                            <span class="badge" style="background-color: #5fcf80; color: white;">Featured</span>
-                                        </div>
-                                        <div class="text-muted small mb-3">Biology • Scientific</div>
-                                        <div class="d-flex align-items-center mb-4">
-                                            <div class="text-warning me-2">
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                                <i class="bi bi-star-fill"></i>
-                                            </div>
-                                            <span class="text-muted ms-2">4.9 (89)</span>
-                                        </div>
-                                        <a href="#" class="btn w-100" style="background-color: #5fcf80; color: white;">
-                                            View Details
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="text-muted small mb-3">
+                          {{ $t->subject?->name ?? '—' }} • {{ $t->branch?->name ?? '—' }}
                         </div>
+
+                        <div class="d-flex align-items-center mb-4">
+                          <div class="text-warning me-2">
+                            <i class="bi bi-star-fill"></i>
+                          </div>
+
+                          <span class="text-muted ms-1">
+                            {{ number_format($t->reviews_avg_rating ?? 0, 1) }}
+                            ({{ $t->reviews_count }} )
+                          </span>
+                        </div>
+
+                        <a href="{{ route('student.teacher-details', $t->id) }}"
+                           class="btn w-100"
+                           style="background-color:#5fcf80; color:white;">
+                          View Details
+                        </a>
+                      </div>
                     </div>
-                </div>
+                  </div>
+                @endforeach
 
-                <!-- Controls -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#featuredTeachersCarousel" data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" style="background-color: #5fcf80; border-radius: 50%;"></span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#featuredTeachersCarousel" data-bs-slide="next">
-                    <span class="carousel-control-next-icon" style="background-color: #5fcf80; border-radius: 50%;"></span>
-                </button>
+              </div>
             </div>
-
-            <div class="text-center mt-5">
-                <a href="{{ route('pages.teachers') }}" class="btn" style="color: #5fcf80; border-color: #5fcf80; padding: 10px 40px;">
-                    View All Teachers
-                </a>
-            </div>
+          @endforeach
         </div>
-    </section>
-    <!-- /Featured Teachers -->
+
+        @if($chunks->count() > 1)
+          <!-- Controls -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#featuredTeachersCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" style="background-color:#5fcf80; border-radius:50%;"></span>
+          </button>
+
+          <button class="carousel-control-next" type="button" data-bs-target="#featuredTeachersCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" style="background-color:#5fcf80; border-radius:50%;"></span>
+          </button>
+        @endif
+
+      </div>
+
+      <div class="text-center mt-5">
+        <a href="{{ route('pages.teachers') }}"
+           class="btn"
+           style="color:#5fcf80; border-color:#5fcf80; padding:10px 40px;">
+          View All Teachers
+        </a>
+      </div>
+
+    @endif
+  </div>
+</section>
+<!-- /Featured Teachers -->
+
 
     <!-- About Us -->
     <section id="about" class="section py-5 bg-light">

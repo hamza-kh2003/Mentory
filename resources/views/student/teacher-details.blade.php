@@ -288,19 +288,24 @@
 
 
             <div class="d-grid mb-3">
-              @if(auth()->check() && auth()->user()->role === 'student')
+         @if(auth()->check() && auth()->user()->role !== 'student')
+  {{-- Admin / Teacher --}}
+  <button type="button" class="btn btn-outline-danger w-100" disabled>
+    <i class="bi bi-heart me-1"></i>
+    Add to Favorite
+  </button>
+@else
+  {{-- Guest OR Student --}}
   <form method="POST" action="{{ route('student.favorites.toggle', $teacher->id) }}">
     @csrf
-    <button type="submit" class="btn w-100 {{ $isFavorited ? 'btn-danger' : 'btn-outline-danger' }}">
+    <button type="submit"
+      class="btn w-100 {{ $isFavorited ? 'btn-danger' : 'btn-outline-danger' }}">
       <i class="bi {{ $isFavorited ? 'bi-heart-fill' : 'bi-heart' }} me-1"></i>
       {{ $isFavorited ? 'Remove from Favorite' : 'Add to Favorite' }}
     </button>
   </form>
-@else
-  <button type="button" class="btn btn-outline-danger w-100" disabled>
-    <i class="bi bi-heart me-1"></i> Add to Favorite
-  </button>
 @endif
+
             </div>
 
             <hr />

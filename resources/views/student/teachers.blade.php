@@ -69,14 +69,7 @@
     backdrop-filter: blur(6px);
   }
 
-  .btn-fav{
-    border-radius: 12px;
-    width: 44px;
-    height: 40px;
-    display: inline-flex;
-    align-items:center;
-    justify-content:center;
-  }
+ 
 </style>
 @endsection
 
@@ -284,13 +277,7 @@
                   View Details
                 </a>
 
-                <button
-                  type="button"
-                  class="btn btn-outline-danger btn-fav"
-                  title="Add to favorites"
-                >
-                  <i class="bi bi-heart"></i>
-                </button>
+                
               </div>
             </div>
 

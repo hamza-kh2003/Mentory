@@ -55,9 +55,9 @@ class FavoriteController extends Controller
     }
 
     // حذف من صفحة favorites
-    public function destroy(Favorite $favorite)
+    public function destroy(Request $request,Favorite $favorite)
     {
-        if ($favorite->student_id !== auth()->id()) {
+        if ($favorite->student_id !== $request->user()->id) {
             abort(403);
         }
 

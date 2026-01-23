@@ -14,6 +14,8 @@ use App\Http\Controllers\ServiceRequestController;
 use App\Http\Controllers\StudentReviewController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\HomeController;
+
 
 
 
@@ -78,9 +80,7 @@ Route::prefix('admin')->group(function () {
 | Public (Guest) - متاح للجميع
 |--------------------------------------------------------------------------
 */
-Route::get('/', function () {
-    return view('student.home');
-})->name('pages.home');
+Route::get('/', [HomeController::class, 'index'])->name('pages.home');
 
 
 Route::get('/teachers', [TeacherListController::class, 'index'])
