@@ -31,7 +31,7 @@ class AuthenticatedSessionController extends Controller
         $user = $request->user();
 
 if ($user->role === 'admin') {
-    return redirect()->route('admin.teacher-profiles');
+    return redirect()->route('admin.dashboard');
 }
 
 if ($user->role === 'teacher') {

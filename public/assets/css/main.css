@@ -2342,3 +2342,22 @@ section,
     color: #aaa;
     border-color: #ddd;
 }
+
+.logout-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+
+    color: black;
+    text-decoration: none;
+    transition: 0.3s;
+
+    cursor: pointer;
+    font: inherit;
+    line-height: normal;
+}
+
+.logout-btn:hover {
+    color: color-mix(in srgb, var(--accent-color), transparent 25%);
+}

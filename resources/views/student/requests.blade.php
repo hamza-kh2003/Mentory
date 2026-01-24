@@ -62,7 +62,7 @@
 
                   <div>
                     <h6 class="mb-1">
-                      Tr-{{ $req->teacherProfile->display_name }}
+                      Tr. {{ $req->teacherProfile->display_name }}
                     </h6>
 
                     <div class="text-muted small mb-1">

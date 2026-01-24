@@ -19,7 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $role = Auth::user()?->role;
 
         if ($role === 'admin') {
-            return route('admin.teacher-profiles');
+            return route('admin.dashboard');
         }
 
         if ($role === 'teacher') {

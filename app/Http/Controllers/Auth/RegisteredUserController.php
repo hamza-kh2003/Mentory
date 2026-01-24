@@ -53,7 +53,7 @@ class RegisteredUserController extends Controller
         $user = Auth::user();
 
 if ($user->role === 'admin') {
-    return redirect()->route('admin.teacher-profiles');
+    return redirect()->route('admin.dashboard');
 }
 
 if ($user->role === 'teacher') {
@@ -61,5 +61,7 @@ if ($user->role === 'teacher') {
 }
 
 return redirect()->route('pages.home');
+
+
     }
 }

@@ -259,7 +259,7 @@
 
             <div class="card-body d-flex flex-column">
               <div class="mb-2">
-                <h5 class="card-title teacher-name mb-1">{{ $t->display_name }}</h5>
+                <h5 class="card-title teacher-name mb-1">Tr. {{ $t->display_name }}</h5>
                 <div class="text-muted small">
                   <i class="bi bi-book me-1"></i>{{ $t->subject?->name ?? '—' }}
                   <span class="mx-1">•</span>

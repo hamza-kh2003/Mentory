@@ -1,6 +1,6 @@
 @extends('layouts.master')
 
-@section('title', 'MentorRate - Find Your Perfect Mentor')
+@section('title', 'Mentory - Find Your Perfect Teacher')
 
 @section('css')
 <style>
@@ -22,6 +22,17 @@
     background: rgba(95,207,128,.12);
     color: #5fcf80;
   }
+  /* Carousel indicators - darker & clearer */
+.carousel-indicators [data-bs-target] {
+    background-color: #5fcf80; /* أخضر الموقع */
+    opacity: 0.4;
+}
+
+.carousel-indicators .active {
+    opacity: 1;
+}
+
+
 </style>
 @endsection
 
@@ -34,10 +45,10 @@
         <div class="container">
             <div class="hero-content py-5">
                 <h2 data-aos="fade-up" data-aos-delay="100">
-                    Learn Smarter,<br />Choose the Right Mentor
+                    Learn Smarter,<br />Choose the Right Teacher
                 </h2>
                 <p data-aos="fade-up" data-aos-delay="200">
-                    Find verified teachers, book sessions, and rate with confidence.
+                    Find verified teachers, send requests, and rate with confidence
                 </p>
                 <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
                     <a href="{{ route('pages.teachers') }}" class="btn-get-started">Browse Teachers</a>
@@ -52,7 +63,7 @@
   <div class="container">
     <div class="section-header text-center mb-5">
       <h2>Top Rated Teachers</h2>
-      <p class="text-muted">Highest rated mentors based on real student reviews</p>
+      <p class="text-muted">Highest rated Teachers based on real student reviews</p>
     </div>
 
     @php
@@ -63,15 +74,15 @@
     @if($topTeachers->isEmpty())
       <div class="text-center text-muted py-5 border rounded bg-light">
         <i class="bi bi-star display-6 d-block mb-2"></i>
-        No rated teachers yet.
+        No teachers available yet.
       </div>
     @else
 
       <div id="featuredTeachersCarousel" class="carousel slide" data-bs-ride="carousel">
 
-        {{-- Indicators (اختياري بس حلو) --}}
+        {{-- Indicators--}}
         @if($chunks->count() > 1)
-          <div class="carousel-indicators" style="bottom:-45px;">
+          <div class="carousel-indicators" style="bottom:-45px; ">
             @foreach($chunks as $i => $c)
               <button type="button"
                       data-bs-target="#featuredTeachersCarousel"
@@ -102,7 +113,7 @@
 
                       <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-start mb-2">
-                          <h5 class="mb-0 fw-bold">{{ $t->display_name }}</h5>
+                          <h5 class="mb-0 fw-bold">Tr. {{ $t->display_name }}</h5>
 
                           <span class="badge" style="background-color:#5fcf80; color:white;">
                             Top Rated
@@ -110,7 +121,7 @@
                         </div>
 
                         <div class="text-muted small mb-3">
-                          {{ $t->subject?->name ?? '—' }} • {{ $t->branch?->name ?? '—' }}
+                          {{ $t->subject?->name ?? '—' }} - {{ $t->branch?->name ?? '—' }}
                         </div>
 
                         <div class="d-flex align-items-center mb-4">
@@ -170,7 +181,7 @@
     <section id="about" class="section py-5 bg-light">
         <div class="container">
             <div class="section-header text-center mb-5">
-                <h2>About MentorRate</h2>
+                <h2>About Mentory</h2>
                 <p class="text-muted">Trusted ratings, real learning</p>
             </div>
 
@@ -181,7 +192,7 @@
 
                 <div class="col-lg-6">
                     <p class="mb-4">
-                        MentorRate helps students find the right teacher with verified reviews.
+                        Mentory helps students find the right teacher with verified reviews.
                         Reviews are allowed only after a completed request.
                     </p>
                     <ul class="list-unstyled">
@@ -218,7 +229,7 @@
             <div class="row gy-4">
                 <div class="col-lg-4">
                     <div class="h-100 p-4">
-                        <h3 class="mb-4">Why MentorRate?</h3>
+                        <h3 class="mb-4">Why Mentory?</h3>
                         <p class="mb-4">
                             No fake reviews — ratings are linked to real requests.
                             Students discover the best teachers faster.
@@ -266,25 +277,25 @@
         <div class="container">
             <div class="section-header text-center mb-5">
                 <h2>Our Features</h2>
-                <p class="text-muted">Everything you need to find the perfect mentor</p>
+                <p class="text-muted">Everything you need to find the right teacher, with confidence</p>
             </div>
 
             <div class="row gy-4">
 
                 {{-- Feature Card --}}
-                <div class="col-lg-3 col-md-4">
+                <div class="col-lg-4 col-md-6">
                     <div class="card h-100 border feature-card">
                         <div class="card-body text-center p-4">
                             <div class="feature-icon mb-3">
                                 <i class="bi bi-search fs-3"></i>
                             </div>
                             <h5 class="fw-bold mb-2">Search Teachers</h5>
-                            <p class="text-muted small mb-0">Find mentors quickly by name.</p>
+                            <p class="text-muted small mb-0">Find teachers quickly by name.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-4">
+                <div class="col-lg-4 col-md-6">
                     <div class="card h-100 border feature-card">
                         <div class="card-body text-center p-4">
                             <div class="feature-icon mb-3">
@@ -296,74 +307,50 @@
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-4">
+                <div class="col-lg-4 col-md-6">
                     <div class="card h-100 border feature-card">
                         <div class="card-body text-center p-4">
                             <div class="feature-icon mb-3">
                                 <i class="bi bi-diagram-3 fs-3"></i>
                             </div>
                             <h5 class="fw-bold mb-2">Filter by Branch</h5>
-                            <p class="text-muted small mb-0">Scientific or Literary options.</p>
+                            <p class="text-muted small mb-0">Select the academic branch that fits your level</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-4">
+                <div class="col-lg-4 col-md-6">
                     <div class="card h-100 border feature-card">
                         <div class="card-body text-center p-4">
                             <div class="feature-icon mb-3">
                                 <i class="bi bi-send-check fs-3"></i>
                             </div>
-                            <h5 class="fw-bold mb-2">Request a Teacher</h5>
-                            <p class="text-muted small mb-0">Send a request in one click.</p>
+                            <h5 class="fw-bold mb-2">Send a Request</h5>
+                            <p class="text-muted small mb-0">Contact teachers easily and start learning.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-4">
+                <div class="col-lg-4 col-md-6">
                     <div class="card h-100 border feature-card">
                         <div class="card-body text-center p-4">
                             <div class="feature-icon mb-3">
                                 <i class="bi bi-star-fill fs-3"></i>
                             </div>
-                            <h5 class="fw-bold mb-2">Rate After Completed</h5>
-                            <p class="text-muted small mb-0">Only real reviews after completion.</p>
+                            <h5 class="fw-bold mb-2">Verified Ratings</h5>
+                            <p class="text-muted small mb-0">Reviews are allowed only after a completed request</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-3 col-md-4">
+                <div class="col-lg-4 col-md-6">
                     <div class="card h-100 border feature-card">
                         <div class="card-body text-center p-4">
                             <div class="feature-icon mb-3">
                                 <i class="bi bi-person-badge fs-3"></i>
                             </div>
-                            <h5 class="fw-bold mb-2">Teacher Profiles</h5>
-                            <p class="text-muted small mb-0">Clear info, bio, and stats.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4">
-                    <div class="card h-100 border feature-card">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon mb-3">
-                                <i class="bi bi-patch-check fs-3"></i>
-                            </div>
-                            <h5 class="fw-bold mb-2">Featured Teachers</h5>
-                            <p class="text-muted small mb-0">Admin highlighted top mentors.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-4">
-                    <div class="card h-100 border feature-card">
-                        <div class="card-body text-center p-4">
-                            <div class="feature-icon mb-3">
-                                <i class="bi bi-shield-lock fs-3"></i>
-                            </div>
-                            <h5 class="fw-bold mb-2">Role Protected</h5>
-                            <p class="text-muted small mb-0">Permissions for each user role.</p>
+                            <h5 class="fw-bold mb-2">Detailed Profiles</h5>
+                            <p class="text-muted small mb-0">View teacher bio, subjects, and real ratings.</p>
                         </div>
                     </div>
                 </div>
@@ -373,19 +360,27 @@
     </section>
     <!-- /Features -->
 
-    <!-- CTA Section -->
-    <section class="section py-5" style="background-color: #5fcf80;">
-        <div class="container">
-            <div class="text-center py-4">
-                <h3 class="text-white mb-3">Ready to Find Your Perfect Mentor?</h3>
-                <p class="text-white mb-4">Join thousands of successful students who improved their learning with MentorRate.</p>
-                <a href="{{ route('pages.teachers') }}" class="btn btn-light px-4">
-                    Browse Teachers
-                </a>
-            </div>
+  <!-- CTA Section -->
+<section class="section py-5" style="background-color: #5fcf80;">
+    <div class="container">
+        <div class="text-center py-4">
+            <h3 class="text-white mb-3">
+                Need Help or Have a Question?
+            </h3>
+            <p class="text-white mb-4">
+                Contact us directly on WhatsApp and we’ll be happy to assist you.
+            </p>
+            <a href="https://wa.me/962795717995"
+               target="_blank"
+               class="btn btn-light px-4">
+                <i class="bi bi-whatsapp me-2"></i>
+                Chat on WhatsApp
+            </a>
         </div>
-    </section>
-    <!-- /CTA Section -->
+    </div>
+</section>
+<!-- /CTA Section -->
+
 
 @endsection
 

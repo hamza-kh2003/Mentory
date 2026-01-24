@@ -10,11 +10,11 @@ class HomeController extends Controller
     {
         $topTeachers = TeacherProfile::query()
             ->where('status', 'approved')
-            ->with(['subject', 'branch'])          // عشان الاسماء تظهر
-            ->withCount('reviews')                 // reviews_count
-            ->withAvg('reviews', 'rating')         // reviews_avg_rating
+            ->with(['subject', 'branch'])          
+            ->withCount('reviews')                
+            ->withAvg('reviews', 'rating')         
             ->orderByRaw('COALESCE(reviews_avg_rating, 0) DESC')
-            ->orderByDesc('reviews_count')         // إذا تساووا بالتقييم، الأعلى مراجعات يطلع
+            ->orderByDesc('reviews_count')       
             ->latest()
             ->take(6)
             ->get();

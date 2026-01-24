@@ -15,6 +15,7 @@ use App\Http\Controllers\StudentReviewController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminDashboardController;
 
 
 
@@ -122,7 +123,7 @@ Route::delete('/account', [AccountController::class, 'destroy'])
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'role:student'])->group(function () {
+Route::middleware(['auth','role:student'])->group(function () {
    Route::get('/requests', [ServiceRequestController::class, 'index'])
     ->name('student.requests');
 
@@ -184,7 +185,11 @@ Route::middleware(['auth', 'role:teacher'])->group(function () {
 | Admin Only
 |--------------------------------------------------------------------------
 */
-Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
+Route::prefix('admin')->middleware(['auth','role:admin'])->group(function () {
+
+ Route::get('/dashboard', [AdminDashboardController::class, 'index'])
+    ->name('admin.dashboard');
+
 
   Route::get('/teacher-profiles', [AdminTeacherProfileController::class, 'index'])
     ->name('admin.teacher-profiles');

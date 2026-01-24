@@ -5,6 +5,14 @@
                   <h5 class="mb-3">Admin Panel</h5>
 
                   <div class="list-group">
+
+                    <a
+                      href="{{route('admin.dashboard')}}"
+                      class="list-group-item list-group-item-action "
+                    >
+                      <i class="bi bi-person-badge me-2"></i> Dashboard
+                    </a>
+
                     <a
                       href="{{route('admin.teacher-profiles')}}"
                       class="list-group-item list-group-item-action "
