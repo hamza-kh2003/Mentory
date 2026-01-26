@@ -16,64 +16,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminDashboardController;
-
-
-
-
-
-
-/*Route::get('/', function () {
-    return view('student.home');
-})->name('pages.home');
-
-Route::get('/teachers', function () {
-    return view('student.teachers');
-})->name('pages.teachers');
-
-Route::get('/teacher-details', function () {
-    return view('student.teacher-details');
-})->name('student.teacher-details');
-
-Route::get('/account', function () {
-    return view('pages.account');
-})->name('pages.account');
-
-Route::get('/requests', function () {
-    return view('student.requests');
-})->name('student.requests');
-
-Route::get('/favorites', function () {
-    return view('student.favorites');
-})->name('student.favorites');
-
-Route::get('/teacher/dashboard', function () {
-    return view('teacher.dashboard');
-})->name('teacher.dashboard');
-
-
-Route::prefix('admin')->group(function () {
-    Route::get('/teacher-profiles', function () {
-        return view('admin.teacher-profiles');
-    })->name('admin.teacher-profiles');
-
-    Route::get('/students', function () {
-        return view('admin.students');
-    })->name('admin.students');
-
-    Route::get('/teachers', function () {
-        return view('admin.teachers');
-    })->name('admin.teachers');
-
-    Route::get('/reviews', function () {
-        return view('admin.reviews');
-    })->name('admin.reviews');
-    Route::get('/subjects-branches', function () {
-        return view('admin.subjects-branches');
-    })->name('admin.subjects-branches');
-    Route::get('/teacher-profile/show', function () {
-        return view('admin.teacher-profile-show');
-    })->name('admin.teacher-profile.show');
-});*/
+use App\Http\Controllers\ChatController;
 
 
 /*
@@ -90,6 +33,8 @@ Route::get('/teachers', [TeacherListController::class, 'index'])
 Route::get('/teachers/{teacherProfile}', [TeacherDetailsController::class, 'show'])
     ->name('student.teacher-details');
 
+ Route::post('/chat/send', [ChatController::class, 'send'])->name('chat.send');
+   
 
 /*
 |--------------------------------------------------------------------------

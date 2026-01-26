@@ -87,7 +87,7 @@
             <div class="card-body">
               <div class="d-flex justify-content-between align-items-start">
                 <div>
-                  <h5 class="card-title mb-1">{{ $t->display_name }}</h5>
+                  <h5 class="card-title mb-1">Tr. {{ $t->display_name }}</h5>
                   <div class="text-muted small">
                     {{ $t->subject?->name ?? '—' }} • {{ $t->branch?->name ?? '—' }}
                   </div>

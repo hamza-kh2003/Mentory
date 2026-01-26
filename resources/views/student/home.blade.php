@@ -22,9 +22,9 @@
     background: rgba(95,207,128,.12);
     color: #5fcf80;
   }
-  /* Carousel indicators - darker & clearer */
+  
 .carousel-indicators [data-bs-target] {
-    background-color: #5fcf80; /* أخضر الموقع */
+    background-color: #5fcf80; 
     opacity: 0.4;
 }
 
@@ -176,6 +176,35 @@
 </section>
 <!-- /Featured Teachers -->
 
+{{-- Demo Advertisement (Google Ads Style Placeholder) --}}
+<div class="my-5">
+  <div class="ad-card d-flex align-items-center gap-3">
+
+    <img
+      src="{{ asset('assets/img/ad-demo.jpg') }}"
+      alt="Advertisement"
+      class="ad-image"
+    >
+
+    <div class="ad-content">
+      <span class="ad-badge">Ad</span>
+
+      <h6 class="ad-title">
+        Boost Your Grades with Private Tutors
+      </h6>
+
+      <p class="ad-text">
+        Find experienced teachers for Tawjihi subjects.
+        Learn smarter and achieve better results.
+      </p>
+
+      <a href="#" class="ad-link">
+        Visit Website
+      </a>
+    </div>
+
+  </div>
+</div>
 
     <!-- About Us -->
     <section id="about" class="section py-5 bg-light">

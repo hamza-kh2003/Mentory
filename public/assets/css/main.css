@@ -2302,25 +2302,22 @@ section,
     /* Add your styles here */
 }
 
-/* ✅ خليك محدد داخل pagination-wrapper بس */
+/*start  pagination */
 .pagination-wrapper nav > div {
-    gap: 16px !important; /* مسافة بين النص وبين الأسهم */
-    flex-wrap: wrap !important; /* لو الشاشة صغيرة ينزلوا تحت */
+    gap: 16px !important;
+    flex-wrap: wrap !important;
     align-items: center;
 }
 
-/* ✅ نص Showing... */
 .pagination-wrapper nav p {
     margin: 0 !important;
-    margin-right: 16px !important; /* يبعد عن الأسهم */
+    margin-right: 16px !important;
 }
 
-/* ✅ لو نزلت الأسهم تحت بسبب wrap */
 .pagination-wrapper nav ul.pagination {
     margin-top: 6px !important;
 }
 
-/* ✅ ألوان pagination أخضر */
 .pagination-wrapper .pagination .page-link {
     color: #5fcf80;
     border-color: #5fcf80;
@@ -2342,6 +2339,7 @@ section,
     color: #aaa;
     border-color: #ddd;
 }
+/*end  pagination*/
 
 .logout-btn {
     background: none;
@@ -2360,4 +2358,56 @@ section,
 
 .logout-btn:hover {
     color: color-mix(in srgb, var(--accent-color), transparent 25%);
+}
+
+/* ===== Google Ads Style Demo ===== */
+.ad-card {
+    border: 1px solid #e6e6e6;
+    border-radius: 16px;
+    padding: 14px;
+    background: #fff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.ad-image {
+    width: 120px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.ad-content {
+    flex: 1;
+}
+
+.ad-badge {
+    font-size: 11px;
+    font-weight: 700;
+    color: #1a73e8;
+    border: 1px solid #1a73e8;
+    border-radius: 6px;
+    padding: 2px 6px;
+    display: inline-block;
+    margin-bottom: 6px;
+}
+
+.ad-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.ad-text {
+    font-size: 14px;
+    color: #5f6368;
+    margin-bottom: 6px;
+}
+
+.ad-link {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1a73e8;
+    text-decoration: none;
+}
+.ad-link:hover {
+    text-decoration: underline;
 }

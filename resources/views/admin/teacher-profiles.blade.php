@@ -81,7 +81,7 @@
           View Details
         </a>
 
-        <form method="POST" action="{{ route('admin.teacher-profiles.approve', $p->id) }}">
+       {{--<form method="POST" action="{{ route('admin.teacher-profiles.approve', $p->id) }}">
           @csrf
           @method('PATCH')
           <button class="btn btn-sm btn-success" @disabled($p->status === 'approved')>
@@ -95,7 +95,7 @@
           <button class="btn btn-sm btn-danger" @disabled($p->status === 'rejected')>
             Reject
           </button>
-        </form>
+        </form>--}} 
 
         <form method="POST" action="{{ route('admin.teacher-profiles.toggleFeatured', $p->id) }}">
           @csrf
